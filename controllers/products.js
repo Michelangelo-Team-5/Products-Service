@@ -11,11 +11,12 @@ module.exports = {
     })
   },
   getProductInfo: (req, res) => {
-    products.getProductInfo(req.params, (err, records) => {
+    products.getProductInfo(req.params, (err, product_info, product_features) => {
       if (err) {
         res.send(err);
       } else {
-        res.send(records);
+        product_info[0].features = product_features[0].json_agg;
+        res.send(product_info[0]);
       }
     })
   },
@@ -33,11 +34,7 @@ module.exports = {
       if (err) {
         res.send(err);
       } else {
-        const related_products = [];
-        for (let related of records) {
-          related_products.push(related.related_product_id);
-        }
-        res.send(related_products);
+        res.send(records[0].related_product_ids);
       }
     })
   }

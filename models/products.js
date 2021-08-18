@@ -9,20 +9,22 @@ module.exports = {
       const products = await db.query(queryStr);
       callback(null, products);
     } catch (err) {
-      console.log(err);
+      callback(err);
     }
   },
   getProductInfo: async (params, callback) => {
     const { product_id } = params;
     const productQuery = `SELECT * FROM product_inventory WHERE id=${product_id} LIMIT 1`
-    const featureQuery = `SELECT feature, "value" FROM product_features WHERE product_id=${product_id}`;
+    const featureQuery = `SELECT json_agg(product_features)
+                          FROM (
+                            SELECT feature, value FROM product_features WHERE product_id=${product_id}
+                          ) as product_features`;
     try {
       const product = await db.query(productQuery);
       const product_features = await db.query(featureQuery);
-      const result = {product, product_features};
-      callback(null, result);
+      callback(null, product, product_features);
     } catch (err) {
-      console.log(err);
+      callback(err);
     }
   },
   getStyles: async (params, callback) => {
@@ -38,17 +40,19 @@ module.exports = {
       const result = {styles, photos, skus};
       callback(null, result);
     } catch (err) {
-      console.log(err);
+      callback(err);
     }
   },
   getRelated: async (params, callback) => {
     const { product_id } = params;
-    const queryStr = `SELECT related_product_id FROM related_products WHERE current_product_id=${product_id}`;
+    const queryStr = `SELECT array_agg (related_product_id) as related_product_ids
+                      FROM related_products
+                      WHERE current_product_id=${product_id}`;
     try {
       const related_products = await db.query(queryStr);
       callback(null, related_products);
     } catch (err) {
-      console.log(err);
+      callback(err);
     }
   }
 }
