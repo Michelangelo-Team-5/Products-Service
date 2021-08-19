@@ -25,7 +25,16 @@ module.exports = {
       if (err) {
         res.send(err);
       } else {
-        res.send(records);
+        let styles = {};
+        let results = [];
+
+        for (let record of records) {
+          results.push(record.json_build_object);
+        }
+
+        styles.product_id = req.params.product_id;
+        styles.results = results;
+        res.send(styles);
       }
     })
   },

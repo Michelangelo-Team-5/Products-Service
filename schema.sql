@@ -33,14 +33,14 @@ CREATE TABLE product_styles (
 
 CREATE TABLE product_photos (
   id INTEGER PRIMARY KEY,
-  product_id INTEGER,
-  thumbnail_url TEXT NOT NULL,
-  url TEXT NOT NULL
+  style_id INTEGER REFERENCES product_styles(style_id),
+  thumbnail_url TEXT,
+  url TEXT
 );
 
 CREATE TABLE skus (
   id INTEGER PRIMARY KEY,
-  product_id INTEGER,
+  style_id INTEGER REFERENCES product_styles(style_id),
   size VARCHAR (8) NOT NULL,
   quantity INTEGER NOT NULL
 );

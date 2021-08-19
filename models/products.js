@@ -29,15 +29,15 @@ module.exports = {
   },
   getStyles: async (params, callback) => {
     const { product_id } = params;
-    const styleQuery = `SELECT * FROM product_inventory WHERE id=${product_id} LIMIT 1`
-    const photoQuery = `SELECT feature, value FROM product_features WHERE product_id=${product_id}`;
-    const skuQuery = `SELECT id, size, quantity FROM skus WHERE product_id=${product_id}`;
+    const queryStr = `SELECT json_build_object('style_id', style_id, 'name', name, 'sale_price', sale_price, 'original_price', original_price, 'default?', "default?", 'photos',
+                        (SELECT json_agg(json_build_object('thumbnail_url', thumbnail_url, 'url', url)) FROM product_photos WHERE product_photos.style_id=product_styles.style_id),
+                        'skus',
+                        (SELECT json_object_agg(id, json_build_object('quantity', quantity, 'size', size)) FROM skus WHERE skus.style_id=product_styles.style_id)
+                        )
+                      FROM product_styles
+                      WHERE product_styles.product_id=${product_id}`;
     try {
-      const styles = await db.query(styleQuery);
-      const photos = await db.query(photoQuery);
-      const skus = await db.query(skuQuery);
-
-      const result = {styles, photos, skus};
+      const result = await db.query(queryStr);
       callback(null, result);
     } catch (err) {
       callback(err);

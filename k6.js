@@ -21,8 +21,8 @@ export let options = {
 
 export default function () {
   // http.get(`http://localhost:3000/products?page=${Math.floor((Math.random()*(50000-20000))+20000)}`);
-  http.get(`http://localhost:3000/products/${Math.floor((Math.random()*(1000000-750000))+750000)}/related`);
-  // http.get(`http://localhost:3000/products/${Math.floor((Math.random()*(1000000-750000))+750000)}/styles`);
+  // http.get(`http://localhost:3000/products/${Math.floor((Math.random()*(1000000-750000))+750000)}/related`);
+  http.get(`http://localhost:3000/products/${Math.floor((Math.random()*(1000000-750000))+750000)}/styles`);
   // http.get(`http://localhost:3000/products/${Math.floor((Math.random()*(1000000-750000))+750000)}/`);
   sleep(1);
 }
