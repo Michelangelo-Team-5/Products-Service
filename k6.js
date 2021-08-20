@@ -5,7 +5,7 @@ import { sleep } from 'k6';
 //   scenarios: {
 //     constant_request_rate: {
 //       executor: 'constant-arrival-rate',
-//       rate: 1000,
+//       rate: 16,
 //       timeUnit: '1s', // 1000 iterations per second, i.e. 1000 RPS
 //       duration: '30s',
 //       preAllocatedVUs: 3000, // how large the initial pool of VUs would be
@@ -15,7 +15,7 @@ import { sleep } from 'k6';
 // };
 
 export let options = {
-  vus: 1000,
+  vus: 500,
   duration: "30s"
 };
 
